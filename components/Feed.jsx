@@ -36,12 +36,17 @@ const Feed = () => {
         },
       });
       const data = await response.json();
-
-      setAllPosts(data);
+  
+      // Filter out posts with the tag "Done"
+      const filteredPosts = data.filter((item) => item.tag !== "Done");
+  
+      // Set the filtered posts
+      setAllPosts(filteredPosts);
     } catch (error) {
       console.error("Failed to fetch posts:", error);
     }
   };
+  
 
   useEffect(() => {
     fetchPosts();

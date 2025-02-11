@@ -20,7 +20,6 @@ const SpecialPromptCardList = ({ data, handleTagClick}) => {
 
 const SpecialFeed = ({word, title}) => {
   const [allPosts, setAllPosts] = useState([]);
-
   const fetchPosts = async () => {
     const response = await fetch("/api/prompt");
     const data = await response.json();
