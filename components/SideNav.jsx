@@ -7,6 +7,8 @@ import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 import PopupPortal from "./PopupPortal";
 import CreateCardPopup from "./CreateCardPopup";
 
+const dontNeedLogin = true; 
+
 const SideNav = () => {
   const { data: session } = useSession();
 
@@ -47,10 +49,12 @@ const SideNav = () => {
 
       {/* Desktop Navigation */}
       <div className='sm:flex hidden'>
-        {session?.user ? (
+        {session?.user || dontNeedLogin ? (
           <div className='w-full flex flex-col'>
 
-            <div className="flex flex-row m-5">
+                  {session?.user ? (
+                    <>
+                        <div className="flex flex-row m-5">
               <Image
                 src={session?.user.image}
                 width={37}
@@ -60,6 +64,10 @@ const SideNav = () => {
               />
                 <span className="ml-4 font-satoshi font-bold flex justify-center items-center text-center text-2xl">{session?.user.name}</span>
             </div>
+                    </>
+                  ) : null}
+
+          
              
 
             <Link href='/' className="button">
@@ -125,19 +133,24 @@ const SideNav = () => {
                 <span className="ml-4 font-bold flex justify-center items-center text-center text-1xl">Finished Tasks</span>
             </Link>
 
+            {session?.user ? (
+                <>
+                  <button onClick={() => togglePopup()} className='black_btn mt-5 ml-5 mr-5'>
+                    Create Post
+                  </button>
 
-            <button onClick={() => {togglePopup()}} className='black_btn mt-5 ml-5 mr-5'>
-              Create Post
-            </button>
+                  <button type='button' onClick={signOut} className='outline_btn mt-5 ml-5 mr-5'>
+                    Sign Out
+                  </button>
+                </>
+              ) : null}
 
-            <button type='button' onClick={signOut} className='outline_btn mt-5 ml-5 mr-5 '>
-              Sign Out
-            </button>
+           
 
            
           </div>
         ) : (
-          <>
+          <>  
             {providers &&
               Object.values(providers).map((provider) => (
                 <PopupPortal>
@@ -167,7 +180,7 @@ const SideNav = () => {
       {/* Mobile Navigation */}
       <div className='sm:hidden flex relative'>
         
-        {session?.user ? (
+        {session?.user || dontNeedLogin ? (
           <div className='flex'>
             <Image
               src={session?.user.image}
